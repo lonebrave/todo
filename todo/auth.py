@@ -29,7 +29,7 @@ def register_post():
     elif db.execute(
         'SELECT id FROM user WHERE username = ?', (username,)
     ).fetchone() is not None:
-        error 'User {} is already registered.'.format(username)
+        error = 'User {} is already registered.'.format(username)
 
     if error is None:
         db.execute(
