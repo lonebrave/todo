@@ -6,6 +6,6 @@ CREATE TABLE todos (
     priority TEXT NOT NULL,
     time TEXT NOT NULL,
     created TEXT NOT NULL,
-    done BOOLEAN NOT NULL,
+    done BOOLEAN NOT NULL
 );
 
