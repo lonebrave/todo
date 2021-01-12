@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS todos;
+
+CREATE TABLE todos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    descr TEXT NOT NULL,
+    priority TEXT NOT NULL,
+    time TEXT NOT NULL,
+    created TEXT NOT NULL,
+    done BOOLEAN NOT NULL,
+);
+
