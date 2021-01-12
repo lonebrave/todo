@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Todo Items{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if g.user %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Priority</th>
+                <th>Time</th>
+                <th>Description</th>
+                <th>Done</th>
+            </tr>
+            {% for todo in todo_list %}
+                <tr>
+                    <td>{{todo.id}}</td>
+                    <td>{{todo.priority}}</td>
+                    <td>{{todo.time}}</td>
+                    <td>{{todo.descr}}</td>
+                    <td>{{todo.done}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <form action='/' method='POST'>
+            <input type='text' name='descr' id='desc' placeholder="Description">
+            <input type='text' name='time' id='time' placeholder="Time Estimate">
+            <select name='priority'>
+                <option disabled  selected value=''>Priority</option>
+                <option value='A'>A</option>
+                <option value='B'>B</option>
+                <option value='C'>C</option>
+            </select>
+            <input type='submit' value='Add Item'>
+        </form>
+        {% endif %}
+{% endblock %}
