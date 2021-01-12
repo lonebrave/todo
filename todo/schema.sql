@@ -14,7 +14,7 @@ CREATE TABLE todos (
     priority TEXT NOT NULL,
     time TEXT NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    done BOOLEAN NOT NULL,
+    done BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
