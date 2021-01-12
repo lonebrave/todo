@@ -5,7 +5,7 @@ CREATE TABLE todos (
     descr TEXT NOT NULL,
     priority TEXT NOT NULL,
     time TEXT NOT NULL,
-    created TEXT NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     done BOOLEAN NOT NULL
 );
 
