@@ -16,7 +16,8 @@ def index():
     todos = db.execute(
         'SELECT t.id, descr, priority, time, done, user_id'
         ' FROM todos t JOIN user u on t.user_id = u.id'
-        ' ORDER BY created DESC'
+        ' WHERE u.id = ?'
+        ' ORDER BY created DESC', (g.user['id'],)
     ).fetchall()
     return render_template('todo/index.html', todo_list=todos)
 
