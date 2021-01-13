@@ -137,19 +137,31 @@ def test_done(client, auth, app):
 
 
 @pytest.mark.parametrize('path', (
-    # '/',
+    '/',
     '/update/1',
 ))
 def test_create_update_validate(client, auth, path):
     auth.login()
 
-    response = client.post(path, data={'descr': '', 'priority': 'A', 'time': '5min'})
+    response = client.post(
+        path,
+        data={'descr': '', 'priority': 'A', 'time': '5min'},
+        follow_redirects=True
+        )
     assert b'Description is required.' in response.data
 
-    response = client.post(path, data={'descr': 'Test task 1', 'priority': 'A', 'time': ''})
+    response = client.post(
+        path,
+        data={'descr': 'Test task 1', 'priority': 'A', 'time': ''},
+        follow_redirects=True
+        )
     assert b'Time estimate is required.' in response.data
 
-    response = client.post(path, data={'descr': 'Test task 1', 'priority': '', 'time': '5min'})
+    response = client.post(
+        path,
+        data={'descr': 'Test task 1', 'priority': '', 'time': '5min'},
+        follow_redirects=True
+        )
     assert b'Priority is required.' in response.data
 
 
