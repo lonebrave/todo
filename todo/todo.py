@@ -10,6 +10,7 @@ bp = Blueprint('todo', __name__)
 
 
 @bp.route('/', methods=['GET'])
+@login_required
 def index():
     db = get_db()
     todos = db.execute(
@@ -21,6 +22,7 @@ def index():
 
 
 @bp.route('/', methods=['POST'])
+@login_required
 def add_item():
     descr = request.form.get('descr')
     time = request.form.get('time')
