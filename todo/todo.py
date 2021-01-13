@@ -77,6 +77,7 @@ def update(todo_id):
 
 
 @bp.route('/update/<int:todo_id>', methods=['POST'])
+@login_required
 def update_todo(todo_id):
     todo = get_todo(todo_id)
     descr = request.form.get('descr')
@@ -106,6 +107,7 @@ def update_todo(todo_id):
 
 
 @bp.route('/delete/<int:todo_id>', methods=['GET'])
+@login_required
 def delete(todo_id):
     # call get_todo to verify todo exists and user is correct
     get_todo(todo_id)
@@ -121,6 +123,7 @@ def delete(todo_id):
 
 
 @bp.route('/done/<int:todo_id>', methods=['GET'])
+@login_required
 def done(todo_id):
     # call get_todo to verify todo exists and user is correct
     get_todo(todo_id)
