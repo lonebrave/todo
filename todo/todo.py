@@ -99,3 +99,24 @@ def update_post(todo_id):
         db.commit()
 
     return redirect(url_for('todo.index'))
+
+
+@bp.route('/done/<int:todo_id>', methods=['GET'])
+def done(todo_id):
+    db = get_db()
+    todo = db.execute(
+        'SELECT t.id, descr, priority, time, done, user_id'
+        ' FROM todos t JOIN user u on t.user_id = u.id'
+        ' WHERE t.id = ?', (todo_id,)
+    ).fetchone()
+
+    if todo is None:
+        abort(404, "Todo id {todo_id} doesn't exist.")
+    else:
+        db.execute(
+            'UPDATE todos SET done = TRUE WHERE id = ?',
+            (todo_id,)
+        )
+        db.commit()
+
+    return redirect(url_for('todo.index'))
