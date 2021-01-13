@@ -51,8 +51,7 @@ def add_item():
     return redirect(url_for('todo.index'))
 
 
-@bp.route('/update/<int:todo_id>', methods=['GET'])
-def update(todo_id):
+def get_todo(todo_id, check_user=True):
     db = get_db()
     todo = db.execute(
         'SELECT t.id, descr, priority, time, done, user_id'
@@ -63,11 +62,23 @@ def update(todo_id):
     if todo is None:
         abort(404, "Todo id {todo_id} doesn't exist.")
 
+    if check_user and todo['user_id'] != g.user['id']:
+        abort(403)
+
+    return todo
+
+
+@bp.route('/update/<int:todo_id>', methods=['GET'])
+@login_required
+def update(todo_id):
+    todo = get_todo(todo_id)
+
     return render_template('todo/update.html', todo=todo)
 
 
 @bp.route('/update/<int:todo_id>', methods=['POST'])
-def update_post(todo_id):
+def update_todo(todo_id):
+    todo = get_todo(todo_id)
     descr = request.form.get('descr')
     time = request.form.get('time')
     priority = request.form.get('priority')
@@ -84,27 +95,21 @@ def update_post(todo_id):
         flash(error)
     else:
         db = get_db()
-        todo = db.execute(
-            'SELECT t.id, descr, priority, time, done, user_id'
-            ' FROM todos t JOIN user u on t.user_id = u.id'
-            ' WHERE t.id = ?', (todo_id,)
-        ).fetchone()
-
-        if todo is None:
-            abort(404, "Todo id {todo_id} doesn't exist.")
-        else:
-            db.execute(
-                'UPDATE todos SET descr = ?, priority = ?, time = ?'
-                ' WHERE id = ?',
-                (descr, priority, time, todo_id)
-            )
-            db.commit()
+        db.execute(
+            'UPDATE todos SET descr = ?, priority = ?, time = ?'
+            ' WHERE id = ?',
+            (descr, priority, time, todo_id)
+        )
+        db.commit()
 
     return redirect(url_for('todo.index'))
 
 
 @bp.route('/delete/<int:todo_id>', methods=['GET'])
 def delete(todo_id):
+    # call get_todo to verify todo exists and user is correct
+    get_todo(todo_id)
+
     db = get_db()
     db.execute(
         'DELETE FROM todos WHERE id = ?',
@@ -117,20 +122,14 @@ def delete(todo_id):
 
 @bp.route('/done/<int:todo_id>', methods=['GET'])
 def done(todo_id):
-    db = get_db()
-    todo = db.execute(
-        'SELECT t.id, descr, priority, time, done, user_id'
-        ' FROM todos t JOIN user u on t.user_id = u.id'
-        ' WHERE t.id = ?', (todo_id,)
-    ).fetchone()
+    # call get_todo to verify todo exists and user is correct
+    get_todo(todo_id)
 
-    if todo is None:
-        abort(404, "Todo id {todo_id} doesn't exist.")
-    else:
-        db.execute(
-            'UPDATE todos SET done = TRUE WHERE id = ?',
-            (todo_id,)
-        )
-        db.commit()
+    db = get_db()
+    db.execute(
+        'UPDATE todos SET done = TRUE WHERE id = ?',
+        (todo_id,)
+    )
+    db.commit()
 
     return redirect(url_for('todo.index'))
