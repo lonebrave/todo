@@ -94,6 +94,7 @@ def update_todo(todo_id):
 
     if error is not None:
         flash(error)
+        return render_template('todo/update.html', todo=todo)
     else:
         db = get_db()
         db.execute(
