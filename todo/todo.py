@@ -73,7 +73,7 @@ def update_post(todo_id):
 
     if not request.form.get('descr') and isinstance(request.form.get('descr'), str):
         error = 'Description is required.'
-    if not request.form.get('time') and isinstance(requst.form.get('time'), str):
+    if not request.form.get('time') and isinstance(request.form.get('time'), str):
         error = 'Time estimate is required.'
     if not request.form.get('priority') and request.form.get('priority') in ['A', 'B', 'C']:
         error = 'Priority is required.'
