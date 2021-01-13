@@ -85,11 +85,11 @@ def update_todo(todo_id):
     priority = request.form.get('priority')
     error = None
 
-    if not request.form.get('descr') and isinstance(request.form.get('descr'), str):
+    if not request.form.get('descr') or not isinstance(request.form.get('descr'), str):
         error = 'Description is required.'
-    if not request.form.get('time') and isinstance(request.form.get('time'), str):
+    if not request.form.get('time') or not isinstance(request.form.get('time'), str):
         error = 'Time estimate is required.'
-    if not request.form.get('priority') and request.form.get('priority') in ['A', 'B', 'C']:
+    if not request.form.get('priority') or request.form.get('priority') not in ['A', 'B', 'C']:
         error = 'Priority is required.'
 
     if error is not None:
