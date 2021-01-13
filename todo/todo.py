@@ -91,12 +91,24 @@ def update_post(todo_id):
         if todo is None:
             abort(404, "Todo id {todo_id} doesn't exist.")
         else:
-        db.execute(
-            'UPDATE todos SET descr = ?, priority = ?, time = ?'
-            ' WHERE id = ?',
-            (descr, priority, time, todo_id)
-        )
-        db.commit()
+            db.execute(
+                'UPDATE todos SET descr = ?, priority = ?, time = ?'
+                ' WHERE id = ?',
+                (descr, priority, time, todo_id)
+            )
+            db.commit()
+
+    return redirect(url_for('todo.index'))
+
+
+@bp.route('/delete/<int:todo_id>', methods=['GET'])
+def delete(todo_id):
+    db = get_db()
+    db.execute(
+        'DELETE FROM todos WHERE id = ?',
+        (todo_id,)
+    )
+    db.commit()
 
     return redirect(url_for('todo.index'))
 
