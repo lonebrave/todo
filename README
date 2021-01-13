@@ -1,1 +1,11 @@
 To do tracker inspired by Time Management for System Administrators.
+
+How to run the app (in development):
+export FLASK_APP=todo
+export FLASK_ENV=dev
+flask run
+
+How to initialize the database:
+export FLASK_APP=todo
+export FLASK_ENV=dev
+flask init-db
