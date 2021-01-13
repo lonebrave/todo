@@ -47,3 +47,46 @@ def add_item():
         db.commit()
 
     return redirect(url_for('todo.index'))
+
+
+@bp.route('/update/<int:todo_id>', methods=['GET'])
+def update(todo_id):
+    db = get_db()
+    todo = db.execute(
+        'SELECT t.id, descr, priority, time, done, user_id'
+        ' FROM todos t JOIN user u on t.user_id = u.id'
+        ' WHERE t.id = ?', (todo_id,)
+    ).fetchone()
+
+    if todo is None:
+        abort(404, "Todo id {todo_id} doesn't exist.")
+
+    return render_template('todo/update.html', todo=todo)
+
+
+@bp.route('/update/<int:todo_id>', methods=['POST'])
+def update_post(todo_id):
+    descr = request.form.get('descr')
+    time = request.form.get('time')
+    priority = request.form.get('priority')
+    error = None
+
+    if not request.form.get('descr') and isinstance(request.form.get('descr'), str):
+        error = 'Description is required.'
+    if not request.form.get('time') and isinstance(requst.form.get('time'), str):
+        error = 'Time estimate is required.'
+    if not request.form.get('priority') and request.form.get('priority') in ['A', 'B', 'C']:
+        error = 'Priority is required.'
+
+    if error is not None:
+        flash(error)
+    else:
+        db = get_db()
+        db.execute(
+            'UPDATE todos SET descr = ?, priority = ?, time = ?'
+            ' WHERE id = ?',
+            (descr, priority, time, todo_id)
+        )
+        db.commit()
+
+    return redirect(url_for('todo.index'))

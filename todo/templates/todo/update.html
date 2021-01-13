@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Update Todo Item{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if g.user %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Priority</th>
+                <th>Time</th>
+                <th>Description</th>
+                <th>Done</th>
+            </tr>
+            {% for todo in todo_list %}
+                <tr>
+                    <td>{{todo.id}}</td>
+                    <td>{{todo.priority}}</td>
+                    <td>{{todo.time}}</td>
+                    <td>{{todo.descr}}</td>
+                    <td>{{todo.done}}</td>
+                    <td><a href='update/{{ todo.id }}'>Update</a></td>
+                    <td><a href='done/{{ todo.id }}'>Mark Done</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <form action='/update/{{ todo.id }}' method='POST'>
+            <input type='text' name='descr' id='desc' placeholder="Description" value="{{ todo['descr'] }}">
+            <input type='text' name='time' id='time' placeholder="Time Estimate" value="{{ todo['time'] }}">
+            <select name='priority'>
+                <option disabled  value=''>Priority</option>
+                <option value='A' {% if todo['priority'] == 'A' %}selected{% endif %}>A</option>
+                <option value='B' {% if todo['priority'] == 'B' %}selected{% endif %}>B</option>
+                <option value='C' {% if todo['priority'] == 'C' %}selected{% endif %}>C</option>
+            </select>
+            <input type='submit' value='Update Item'>
+        </form>
+        <a href='/'>Cancel</a>
+        {% endif %}
+{% endblock %}
